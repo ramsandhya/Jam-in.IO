@@ -20,26 +20,23 @@ io.on('connection', function(socket) {
   //Keyboard sounds and listening to keyboard presses as 'event listeners'
 
 
-  socket.on('noteOn', function(data){
+  socket.on('fnPlayNote', function(data){
     console.log('It is playing music');
-    io.emit('noteOn',data);
+    io.emit('fnPlayNote',data);
   });
 
 
-  socket.on('noteOff', function(data){
-    console.log('It is note playing music');
-    io.emit('noteOff', data);
-
-  });
-
-
-
-
+  // socket.on('noteOff', function(data){
+  //   console.log('It is note playing music');
+  //   io.emit('noteOff', data);
+  //
+  // });
+  // End of keyboard
 
   users.push({user: null, socket: socket.id});
 
   //send user connected message to all users
-  io.emit('chat message', {user: 'System', msg: 'a user connected...'});
+  io.emit('chat message', {user: 'System', msg: 'a user connected..'});
 
   //when a chat message is received, send to all users (including sender)
   socket.on('chat message', function(msg) {
@@ -57,14 +54,6 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     io.emit('chat message', {user: 'System', msg: 'a user disconnected...'});
 
-
-
-
-
-
-
-
-
     //search for user by socket.id and remove from users array
     for (var j = 0; j < users.length; j++) {
       if (users[j].socket === socket.id) {
@@ -75,11 +64,6 @@ io.on('connection', function(socket) {
     }
 
   });
-
-
-
-
-
 
   //emit message for new user coming online
   socket.on('user online', function(msg) {

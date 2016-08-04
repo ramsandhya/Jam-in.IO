@@ -1,187 +1,263 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Socket.IO chat</title>
-  </head>
-  <style>
-  html{
+<!DOCTYPE html>
+<head>
 
-  }
-  * { margin: 0;
-     padding: 0;
-     box-sizing:
-     border-box;
+  <style>
+
+      body { font-family: Helvetica; color: rgb(32,32,32); padding: 10px;
+          background:url('https://www.walldevil.com/wallpapers/w16/musical-notes.jpg') repeat;
+           }
+
+      b { font-weight: bold; }
+
+      .key { position: absolute; font-family: Helvetica; font-weight: 100; font-size: 12px;
+          border: 1px solid rgba(32,32,32,0.2);
+          border-radius: 0px 0px 5px 5px;
+          cursor:pointer;
+          box-shadow: 0px 5px 1px rgba(32,32,32,0.2);
+          -webkit-transition: margin 0.05s ease, background-color 0.05s ease, box-shadow 0.05s ease; }
+      .key:hover { background-color: rgb(255,192,32); }
+
+      .key .label { position: absolute; bottom: 5px; text-align: center; left: 0px; right: 0px; }
+
+      .black { background-color: rgb(32,32,32); color: #ffffff ; z-index: 1; text-shadow: 0px -1px 1px rgba(255,255,255,0.5); }
+
+      .white { background-color: #ffffff ; color: rgb(32,32,32); z-index: 0; text-shadow: 0px 1px 1px rgba(32,32,32,0.5); }
+
+      .title { text-shadow: 0px 1px 1px rgba(32,32,32,0.2); font-size: 40px; font-weight: bold; font-family: Helvetica; padding: 10px; text-align: center; }
+
+      .sub { color: rgb(96,96,96); font-size: 30px; padding: 10px; font-weight:100; margin:10px 0px; text-shadow: 0px 1px 1px rgba(32,32,32,0.2); text-align:center; }
+      .sub a, .sub a:link, .sub a:visited, .sub a:active { font-weight:bold; color: rgb(128,160,255); text-decoration: none; }
+      .sub a:hover { color: rgb(160,192,255); }
+
+      .source a { color: rgb(255,96,96); }
+      .source a:link, .source a:visited, .source a:active { color: rgb(255,96,96); }
+      .source a:hover { color: rgb(255,128,128); }
+
+      .small { font-size: 20px; }
+      .keyboard-area { margin-left: 267px; width: auto; text-align: left; font-size: 12px; font-weight: 200; padding:10px; color:white; }
+      .keyboard-options { width: auto; text-align: left; font-size: 12px; font-weight: 200; padding:10px; color:white; }
+
+      .keyboard-holder { margin: 30px 0 0 10%; height: 200px; position:relative; user-select:none; -webkit-user-select:none;-moz-user-select:none;-o-user-select:none; }
     }
-  body {
-     font: 13px Helvetica, Arial;
-     background-image: url(background.png);
+    * { margin: 0;
+       padding: 0;
+       box-sizing:
+       border-box;
+      }
+    body {
+       font: 13px Helvetica, Arial;
+       background-image: url("https://www.walldevil.com/wallpapers/w16/musical-notes.jpg");
+      }
+    form {
+        padding: 3px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+       }
+    form input {
+       border: 1px solid black;
+       padding: 10px;
+       width: 50%;
+       margin-right: .5%;
+      }
+    form button {
+       width: 9%;
+       background: red;
+       border-radius: 5px;
+       border: none;
+       padding: 10px;
+       font-size: 12px;
+      }
+    form p {
+      color: white;
+      }
+    #join{
+
     }
-  form {
-      padding: 3px;
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      padding-bottom: 100px;
+      overflow: auto;
+      }
+    #messages li {
+      padding: 5px 10px;
+      }
+    /*#messages li:nth-child(odd) {
+      background: #eee;
+      }*/
+    #onlineUsersContainer {
       position: fixed;
-      bottom: 0;
+      right: 0;
+      top: 0;
+      width: 10%;
+      height: 100%;
+      background: #999;
+      color: white;
+      padding:10px;
+      background-image: url("https://www.walldevil.com/wallpapers/w16/musical-notes.jpg");
+      }
+      #messages {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 14%;
+        height: 100%;
+        background: #999;
+        color: white;
+        padding:10px;
+        background-image: url("https://www.walldevil.com/wallpapers/w16/musical-notes.jpg");
+        }
+    #onlineUsers {
+      margin-left: -15%;
+      }
+    #onlineUsers li {
+      padding: 5px;
+      }
+    #modalForUser {
+      position: absolute;
       width: 100%;
-     }
-  form input {
-     border: 1px solid black;
-     padding: 10px;
-     width: 90%;
-     margin-right: .5%;
+      height:100vh;
+      z-index: 5;
+      }
+    .container {
+        margin: auto;
+        width: 800px;
     }
-  form button {
-     width: 9%;
-     background: rgb(130, 224, 255);
-     border: none;
-     padding: 10px;
+    #nicknameForm {
+      color: white;
     }
-  form p {
-    color: white;
+    input{
+      border-radius: 5px;
     }
-  #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    padding-bottom: 100px;
-    overflow: auto;
-    }
-  #messages li {
-    padding: 5px 10px;
-    }
-  #messages li:nth-child(odd) {
-    background: #eee;
-    }
-  #onlineUsersContainer {
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 143px;
-    height: 100%;
-    background: #999;
-    color: white;
-    padding:10px;
-    }
-  #onlineUsers {
-    margin-left: 25px;
-    }
-  #onlineUsers li {
-    padding: 5px;
-    }
-  #modalForUser {
-    position: absolute;
-    width: 100%;
-    height:100vh;
-    z-index: 5;
-    }
-  .container {
-      margin: auto;
-      width: 800px;
-  }
   </style>
-  <body>
-    <div class="container">
-        <h1>Jam-in!</h1>
-        <div id="keyboard"></div>
-    </div>
-    <div id="modalForUser">
-      <form id="nicknameForm"
-        <h3>What's Your Name?</h3>
-        <input id="nickname" placeholder="Nickname"/>
-        <input type="submit" value="Join">
-      </form>
-    </div>
-    <div id="onlineUsersContainer">
-      <h3>Online Users:</h3>
-      <ul id="onlineUsers"></ul>
-    </div>
-      <ul id="messages"></ul>
-      <form action="" id="messageForm">
-        <p id="isTyping"></p>
-        <input id="m" autocomplete="off" placeholder="Message..." /><button>Send</button>
-      </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      var socket = io();
-      var thisUser;
-      var audioContext= new (window.AudioContext)();
-      var startTime = 0;
-      var source;
-    //when the form is submitted, send a message
-      $('#messageForm').submit(function() {
-        socket.emit('chat message', {user: $('#nickname').val(), msg: $('#m').val()});
-        $('#m').val('');
-        return false;
-      });
-      //when a chat message is received, append li to #messages div
-      socket.on('chat message', function(msg) {
-        if (msg.msg === 'clear') {
-          $('#messages').html('');
-        } else {
-          $('#messages').append($('<li>').text(msg.user + ': ' + msg.msg));
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="scripts/audiosynth.js"></script>
+  <script src="scripts/audiosynth.view.js"></script>
+
+</head>
+
+<body>
+
+  <div class="keyboard-area">
+  Sound
+  <select ID="sound">
+      <option value="0" selected>Keyboard</option>
+      <option value="1">Organ</option>
+     <option value="2">Acoustic Guitar</option>
+     <option value="3">EDM, bro!</option>
+  </select>
+  <div ID="keyboard" class="keyboard-holder"></div>
+  <div class="keyboard-options">
+  Range [C<span ID="OCTAVE_LOWER">3</span>-B<span ID="OCTAVE_UPPER">5</span>]
+    <input type="button" ID="-_OCTAVE" value="-" />
+    <input type="button" ID="+_OCTAVE" value="+" /><br />
+    <i>(Use left/right arrows to adjust with keyboard)</i>
+  </div>
+  <div id="modalForUser">
+    <form id="nicknameForm"
+      <h3>What's Your Name?</h3><br>
+      <input id="nickname" placeholder="Nickname"/><br>
+      <input id="join" type="submit" value="Join">
+    </form>
+  </div>
+  <div id="onlineUsersContainer">
+    <h3>Online Users:</h3>
+    <ul id="onlineUsers"></ul>
+  </div>
+    <ul id="messages"></ul>
+    <form action="" id="messageForm">
+      <p id="isTyping"></p>
+      <input id="m" autocomplete="off" placeholder="Message..." /><button>Send</button>
+    </form>
+  </div>
+
+  <script>
+
+    var a = new AudioSynthView();
+    a.draw();
+    var socket = io();
+    var thisUser;
+    var audioContext= new (window.AudioContext)();
+    var startTime = 0;
+    var source;
+  //when the form is submitted, send a message
+    $('#messageForm').submit(function() {
+      socket.emit('chat message', {user: $('#nickname').val(), msg: $('#m').val()});
+      $('#m').val('');
+      return false;
+    });
+    //when a chat message is received, append li to #messages div
+    socket.on('chat message', function(msg) {
+      if (msg.msg === 'clear') {
+        $('#messages').html('');
+      } else {
+        $('#messages').append($('<li>').text(msg.user + ': ' + msg.msg));
+      }
+    });
+    //when a typing state message is received, show/hide in <span>
+    socket.on('typing state change', function(msg) {
+      if (msg.msg && msg.user !== '') {
+        $('#isTyping').append($('<span>').text(msg.user + ' is typing...'));
+      } else {
+        var stringToFind = msg.user + " is typing...";
+        $("span:contains('" + stringToFind + "')").remove();
+      }
+    });
+    var isTyping = false; //is the user currently typing?
+    var timeLastKeyPressed = Date.now(); //timestamp of last keypress
+    //on keypress, update timestamp of last keypress. ignore enter key as it's used to send a message from the form
+    $("#m").on('keypress', function(e) {
+      //ignore enter key
+      if (e.keyCode == 13) {
+        return;
+      }
+      timeLastKeyPressed = Date.now();
+    });
+    //check typing state every 100 milliseconds
+    var trackTyping = setInterval(function() {
+      var now = Date.now();
+      //if it's been a second or more since the last keypress - user is no longer typing - send a message
+      if (now - timeLastKeyPressed > 1000) {
+        isTyping = false;
+        socket.emit('typing state change', {user: $('#nickname').val(), msg: false});
+      } else {
+        //if the state is changing from false to true, send a message
+        if (!isTyping) {
+          socket.emit('typing state change', {user: $('#nickname').val(), msg: true});
         }
-      });
-      //when a typing state message is received, show/hide in <span>
-      socket.on('typing state change', function(msg) {
-        if (msg.msg && msg.user !== '') {
-          $('#isTyping').append($('<span>').text(msg.user + ' is typing...'));
-        } else {
-          var stringToFind = msg.user + " is typing...";
-          $("span:contains('" + stringToFind + "')").remove();
-        }
-      });
-      var isTyping = false; //is the user currently typing?
-      var timeLastKeyPressed = Date.now(); //timestamp of last keypress
-      //on keypress, update timestamp of last keypress. ignore enter key as it's used to send a message from the form
-      $("#m").on('keypress', function(e) {
-        //ignore enter key
-        if (e.keyCode == 13) {
-          return;
-        }
-        timeLastKeyPressed = Date.now();
-      });
-      //check typing state every 100 milliseconds
-      var trackTyping = setInterval(function() {
-        var now = Date.now();
-        //if it's been a second or more since the last keypress - user is no longer typing - send a message
-        if (now - timeLastKeyPressed > 1000) {
-          isTyping = false;
-          socket.emit('typing state change', {user: $('#nickname').val(), msg: false});
-        } else {
-          //if the state is changing from false to true, send a message
-          if (!isTyping) {
-            socket.emit('typing state change', {user: $('#nickname').val(), msg: true});
-          }
-          isTyping = true;
-        }
-      }, 100);
-      //send a message when nickname form is submitted, hide the overlay
-      $('#nicknameForm').submit(function() {
-        socket.emit('user online', {user: $('#nickname').val(), online: true});
-        $('#modalForUser').hide();
-        return false;
-      });
-      //when user online message is received, show user as online
-      socket.on('user online', function(msg) {
-        if (msg.online) {
-          $('#onlineUsers').append($('<li>').text(msg.user));
-        } else {
-          $('#onlineUsers li:contains("' + msg.user + '")').remove();
-        }
-      });
+        isTyping = true;
+      }
+    }, 100);
+    //send a message when nickname form is submitted, hide the overlay
+    $('#nicknameForm').submit(function() {
+      socket.emit('user online', {user: $('#nickname').val(), online: true});
+      $('#modalForUser').hide();
+      return false;
+    });
+    //when user online message is received, show user as online
+    socket.on('user online', function(msg) {
+      if (msg.online) {
+        $('#onlineUsers').append($('<li>').text(msg.user));
+      } else {
+        $('#onlineUsers li:contains("' + msg.user + '")').remove();
+      }
+    });
 
 //////Keyboard sounds
-    keyboard.addEventListener('noteOn', function(event) {
-      mouseDown= true;
-      keyDown = true;
-    });
+  keyboard.addEventListener('noteOn', function(event) {
+    mouseDown= true;
+    keyDown = true;
+  });
 
-    keyboard.addEventListener('noteOff', function(event) {
-      mouseDown= false;
-      keyDown = false;
-    });
+  keyboard.addEventListener('noteOff', function(event) {
+    mouseDown= false;
+    keyDown = false;
+  });
 
-    </script>
-    <script src="scripts/qwerty-hancock.min.js"></script>
-    <script src="scripts/synth.js"></script>
-  </body>
+  </script>
+</body>
 </html>
