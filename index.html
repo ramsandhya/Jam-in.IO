@@ -6,7 +6,137 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="scripts/audiosynth.js"></script>
     <script src="scripts/audiosynth.view.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+    body { font-family: Helvetica; color: rgb(32,32,32); padding: 10px;
+        background:url('https://www.walldevil.com/wallpapers/w16/musical-notes.jpg') repeat;
+         }
+
+    b { font-weight: bold; }
+
+    .key { position: absolute; font-family: Helvetica; font-weight: 100; font-size: 12px;
+        border: 1px solid rgba(32,32,32,0.2);
+        border-radius: 0px 0px 5px 5px;
+        cursor:pointer;
+        box-shadow: 0px 5px 1px rgba(32,32,32,0.2);
+        -webkit-transition: margin 0.05s ease, background-color 0.05s ease, box-shadow 0.05s ease; }
+    .key:hover { background-color: rgb(255,192,32); }
+
+    .key .label { position: absolute; bottom: 5px; text-align: center; left: 0px; right: 0px; }
+
+    .black { background-color: rgb(32,32,32); color: #ffffff ; z-index: 1; text-shadow: 0px -1px 1px rgba(255,255,255,0.5); }
+
+    .white { background-color: #ffffff ; color: rgb(32,32,32); z-index: 0; text-shadow: 0px 1px 1px rgba(32,32,32,0.5); }
+
+    .title { text-shadow: 0px 1px 1px rgba(32,32,32,0.2); font-size: 40px; font-weight: bold; font-family: Helvetica; padding: 10px; text-align: center; }
+
+    .sub { color: rgb(96,96,96); font-size: 30px; padding: 10px; font-weight:100; margin:10px 0px; text-shadow: 0px 1px 1px rgba(32,32,32,0.2); text-align:center; }
+    .sub a, .sub a:link, .sub a:visited, .sub a:active { font-weight:bold; color: rgb(128,160,255); text-decoration: none; }
+    .sub a:hover { color: rgb(160,192,255); }
+
+    .source a { color: rgb(255,96,96); }
+    .source a:link, .source a:visited, .source a:active { color: rgb(255,96,96); }
+    .source a:hover { color: rgb(255,128,128); }
+
+    .small { font-size: 20px; }
+    .keyboard-area { margin-left: 267px; width: auto; text-align: left; font-size: 12px; font-weight: 200; padding:10px; color:white; }
+    .keyboard-options { width: auto; text-align: left; font-size: 12px; font-weight: 200; padding:10px; color:white; }
+
+    .keyboard-holder { margin: 30px 0 0 10%; height: 200px; position:relative; user-select:none; -webkit-user-select:none;-moz-user-select:none;-o-user-select:none; }
+    }
+    * { margin: 0;
+     padding: 0;
+     box-sizing:
+     border-box;
+    }
+    body {
+     font: 13px Helvetica, Arial;
+     background-image: url("https://www.walldevil.com/wallpapers/w16/musical-notes.jpg");
+    }
+    form {
+      padding: 3px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+     }
+    form input {
+     border: 1px solid black;
+     padding: 10px;
+     width: 50%;
+     margin-right: .5%;
+    }
+    form button {
+     width: 9%;
+     background: red;
+     border-radius: 5px;
+     border: none;
+     padding: 10px;
+     font-size: 12px;
+    }
+    form p {
+    color: white;
+    }
+    #join{
+
+    }
+    #messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 100px;
+    overflow: auto;
+    }
+    #messages li {
+    padding: 5px 10px;
+    }
+    /*#messages li:nth-child(odd) {
+    background: #eee;
+    }*/
+    #onlineUsersContainer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 10%;
+    height: 100%;
+    background: #999;
+    color: white;
+    padding:10px;
+    background-image: url("https://www.walldevil.com/wallpapers/w16/musical-notes.jpg");
+    }
+    #messages {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 14%;
+      height: 100%;
+      background: #999;
+      color: white;
+      padding:10px;
+      background-image: url("https://www.walldevil.com/wallpapers/w16/musical-notes.jpg");
+      }
+    #onlineUsers {
+    margin-left: -15%;
+    }
+    #onlineUsers li {
+    padding: 5px;
+    }
+    #modalForUser {
+    position: absolute;
+    width: 100%;
+    height:100vh;
+    z-index: 5;
+    }
+    .container {
+      margin: auto;
+      width: 800px;
+    }
+    #nicknameForm {
+    color: white;
+    }
+    input{
+    border-radius: 5px;
+    }
+
+    </style>
   </head>
 
   <body>
