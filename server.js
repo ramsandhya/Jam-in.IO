@@ -1,8 +1,10 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
+var io = require('socket.io')(http, {
+  serveClient: (process.env.SERVER === 'production') ? false : true,
+  path: '/socket.io'
+});
 app.use('/scripts', express.static('scripts'));
 
 app.set('port', (process.env.PORT || 3000));
