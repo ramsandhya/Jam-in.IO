@@ -5,7 +5,7 @@ var io = require('socket.io')(http);
 
 app.use('/scripts', express.static('scripts'));
 
-app.set('port', (process.env.PORT || 3000));
+// app.set('port', (process.env.PORT || 3000));
 //on a get request, send index.html
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -96,10 +96,10 @@ var userExists = false;
 });
 
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
-
-// http.listen(5000, function() {
-//   console.log('Listening on port 5000...');
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
 // });
+
+http.listen(5000, function() {
+  console.log('Listening on port 5000...');
+});
