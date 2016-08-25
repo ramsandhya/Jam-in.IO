@@ -3,7 +3,6 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-
 app.use('/scripts', express.static('scripts'));
 
 app.set('port', (process.env.PORT || 3000));
